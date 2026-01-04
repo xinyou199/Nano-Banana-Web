@@ -11,4 +11,6 @@
 - 生成一个更详细的部署文档或 Dockerfile/CICD 示例；
 - 帮你把敏感配置迁移到环境变量并演示部署流程。
 
-# PublicWorks
+# 默认登陆账号密码
+账号：admin  
+密码:admin123
