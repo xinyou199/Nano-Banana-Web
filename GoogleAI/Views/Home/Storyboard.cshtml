@@ -1,0 +1,272 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "分镜制作";
+    ViewBag.PageTitle = "分镜制作";
+    ViewBag.CurrentPage = "storyboard";
+    ViewBag.Username = "admin";
+}
+
+<!-- 使用统一导航栏部分视图 -->
+@await Html.PartialAsync("_Navigation")
+
+<!-- 内容区域 -->
+<div id="storyboard-content" class="main-content active" style="padding: 20px;">
+    <!-- 分镜制作内容 -->
+    <div>
+        <div class="storyboard-container" style="display: grid; grid-template-columns: 30% 1fr; gap: 20px; max-width: 1600px; margin: 0 auto;">
+            <!-- 左侧：项目配置区 -->
+            <div class="storyboard-config">
+                <div class="card fixed-height">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                            <i class="fas fa-cog"></i> 分镜配置
+                        </h2>
+                    </div>
+
+                    <div class="card-content">
+                        <!-- 项目选择/创建 -->
+                        <div class="form-group">
+                            <label for="projectSelect">
+                                <i class="fas fa-folder"></i> 选择项目
+                            </label>
+                            <div style="display: flex; gap: var(--spacing-sm);">
+                                <select id="projectSelect" class="form-control" onchange="loadProjectDetails()" style="flex: 1;">
+                                    <option value="">创建新项目</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="deleteCurrentProject()" style="padding: 8px 12px;" title="删除项目">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 项目名称 -->
+                        <div class="form-group">
+                            <label for="projectName">
+                                <i class="fas fa-heading"></i> 项目名称
+                            </label>
+                            <input type="text" id="projectName" class="form-control" placeholder="输入项目名称" />
+                        </div>
+
+                        <!-- 项目描述 -->
+                        <div class="form-group">
+                            <label for="projectDescription">
+                                <i class="fas fa-pen-fancy"></i> 项目描述
+                            </label>
+                            <textarea id="projectDescription" class="form-control" rows="2" placeholder="项目的简短描述"></textarea>
+                        </div>
+
+                        <!-- 模型选择 -->
+                        <div class="form-group">
+                            <label for="modelSelect">
+                                <i class="fas fa-robot"></i> AI模型
+                            </label>
+                            <select id="modelSelect" class="form-control">
+                                <option value="">加载中...</option>
+                            </select>
+                        </div>
+
+                        <!-- 图片比例 -->
+                        <div class="form-group">
+                            <label for="aspectRatioSelect">
+                                <i class="fas fa-expand-arrows-alt"></i> 图片比例
+                            </label>
+                            <select id="aspectRatioSelect" class="form-control">
+                                <option value="9:16">竖屏 9:16（手机壁纸）</option>
+                                <option value="3:4">竖向 3:4（小红书）</option>
+                                <option value="1:1">正方形 1:1（头像）</option>
+                                <option value="4:3">标准 4:3</option>
+                                <option value="16:9" selected>宽屏 16:9（电脑壁纸）</option>
+                                <option value="21:9">超宽 21:9（宽屏壁纸）</option>
+                                <option value="3:2">摄影 3:2</option>
+                                <option value="2:3">竖摄影 2:3</option>
+                            </select>
+                        </div>
+
+                        <!-- 基础提示词 -->
+                        <div class="form-group">
+                            <label for="basePrompt">
+                                <i class="fas fa-pen-fancy"></i> 基础提示词
+                            </label>
+                            <textarea id="basePrompt" class="form-control" rows="3" placeholder="为所有分镜设置的基础描述，单个帧会在此基础上增加额外描述"></textarea>
+                        </div>
+
+                        <!-- 参考图上传 -->
+                        <div class="form-group">
+                            <label for="referenceImages">
+                                <i class="fas fa-images"></i> 参考图（可选）
+                            </label>
+                            <div class="image-upload-area" onclick="document.getElementById('referenceImageInput').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>点击或拖拽上传参考图片</p>
+                                <p style="font-size: 0.8125rem; color: var(--text-muted);">支持 JPG、PNG 格式，可同时选择多张</p>
+                            </div>
+                            <input type="file" id="referenceImageInput" accept="image/*" multiple style="display: none;">
+                            <div id="referenceImagePreview" class="image-preview-container" style="display: none;"></div>
+                        </div>
+
+                        <!-- 项目操作按钮 -->
+                        <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
+                            <button class="btn btn-primary" onclick="saveProject()" style="flex: 1;">
+                                <i class="fas fa-save"></i> 保存项目
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportProject()">
+                                <i class="fas fa-download"></i> <span>导出</span>
+                            </button>
+                        </div>
+
+                        <!-- 提示词模板区域 -->
+                        <div class="form-group template-section" style="margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 2px solid var(--border-color);">
+                            <div class="template-header">
+                                <label style="margin-bottom: var(--spacing-sm);">
+                                    <i class="fas fa-bookmark"></i> 提示词模板
+                                </label>
+                                <div class="template-buttons">
+                                    <button class="btn btn-secondary" onclick="addCustomTemplate()">
+                                        <i class="fas fa-plus"></i> <span>添加</span>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetTemplates()">
+                                        <i class="fas fa-undo"></i> <span>重置</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="promptTemplates" class="prompt-templates">
+                                <!-- 模板将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：分镜列表区 -->
+            <div class="storyboard-frames">
+                <div class="card fixed-height">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <div>
+                            <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                                <i class="fas fa-th"></i> 分镜帧列表
+                            </h2>
+                            <small id="frameProgress" style="color: var(--text-secondary); margin-top: 5px; display: block;">加载中...</small>
+                        </div>
+                        <button class="btn btn-primary" onclick="addNewFrame()" style="font-size: 0.875rem; padding: 8px 16px;">
+                            <i class="fas fa-plus"></i> 添加分镜
+                        </button>
+                    </div>
+
+                    <div class="card-content">
+                        <div id="framesContainer" class="storyboard-frames-grid">
+                            <div class="empty-state">
+                                <i class="fas fa-film"></i>
+                                <p>暂无分镜</p>
+                                <p style="font-size: 0.875rem; margin-top: var(--spacing-sm);">创建项目后添加分镜帧</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加/编辑分镜帧模态框 -->
+<div id="frameEditorModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> <span id="frameEditorTitle">添加分镜帧</span></h3>
+                <button class="close-btn" onclick="closeFrameEditor()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editFrameId" value="">
+                
+                <!-- 帧序号 -->
+                <div class="form-group">
+                    <label for="frameIndex">
+                        <i class="fas fa-list-ol"></i> 帧序号
+                    </label>
+                    <input type="number" id="frameIndex" class="form-control" min="1" placeholder="输入帧序号" />
+                </div>
+
+                <!-- 帧提示词 -->
+                <div class="form-group">
+                    <label for="framePrompt">
+                        <i class="fas fa-pen-fancy"></i> 帧提示词
+                    </label>
+                    <textarea id="framePrompt" class="form-control" rows="4" placeholder="描述该分镜的具体内容，会与基础提示词结合"></textarea>
+                </div>
+
+                <!-- 帧参考图 -->
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-image"></i> 帧参考图（可选，覆盖全局参考图）
+                    </label>
+                    <div class="image-upload-area" onclick="document.getElementById('frameReferenceImageInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>点击或拖拽上传该帧的参考图</p>
+                    </div>
+                    <input type="file" id="frameReferenceImageInput" accept="image/*" multiple style="display: none;">
+                    <div id="frameReferenceImagePreview" class="image-preview-container" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeFrameEditor()">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="btn btn-primary" onclick="saveFrame()">
+                    <i class="fas fa-check"></i> 确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 帧详情/预览模态框 -->
+<div id="framePreviewModal" class="modal" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-image"></i> 分镜预览</h3>
+                <button class="close-btn" onclick="closeFramePreview()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center;">
+                    <img id="previewImage" src="" alt="分镜预览" style="max-width: 100%; max-height: 400px; border-radius: var(--radius-lg);">
+                </div>
+                <div style="margin-top: var(--spacing-lg);">
+                    <h4>帧信息</h4>
+                    <div style="background: var(--bg-secondary); padding: var(--spacing-md); border-radius: var(--radius-md); margin-top: var(--spacing-sm);">
+                        <p><strong>帧序号：</strong> <span id="previewFrameIndex">-</span></p>
+                        <p><strong>状态：</strong> <span id="previewStatus">-</span></p>
+                        <p><strong>进度：</strong> <span id="previewProgress">-</span></p>
+                        <p><strong>提示词：</strong></p>
+                        <div id="previewPrompt" style="background: var(--bg-primary); padding: var(--spacing-sm); border-radius: var(--radius-sm); white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="reopenFrameEditor()" id="framePreviewEditBtn">
+                    <i class="fas fa-edit"></i> 编辑
+                </button>
+                <button class="btn btn-primary" onclick="splitUpscaleFrame()" id="framePreviewSplitBtn" style="display: none;">
+                    <i class="fas fa-th"></i> 拆分重绘
+                </button>
+                <button class="btn btn-secondary" onclick="closeFramePreview()">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 回到顶部按钮 -->
+<button id="scrollToTopBtn" class="scroll-to-top-btn" onclick="scrollToTop()" title="回到顶部">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+@section Scripts {
+    <script src="~/js/auth.js"></script>
+    <script src="~/js/storyboard.js"></script>
+    <script src="~/js/split-upscale.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/storyboard.css" />
+}

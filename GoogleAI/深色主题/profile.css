@@ -1,0 +1,647 @@
+/* ===== 个人资料页面样式 - 深色主题 ===== */
+
+.profile-container {
+    display: grid;
+    gap: var(--spacing-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== 用户基本信息样式 ===== */
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+/* 签到卡片样式 */
+.check-in-card {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.6);
+}
+
+.check-in-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.check-in-content {
+    position: relative;
+    z-index: 1;
+}
+
+.check-in-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.check-in-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.check-in-points {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.check-in-points span {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.check-in-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.check-in-stat {
+    text-align: center;
+}
+
+.check-in-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.check-in-stat-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.btn-check-in {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-lg);
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-check-in:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-check-in:disabled {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-check-in:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.6);
+}
+
+.profile-details {
+    flex: 1;
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.info-row label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 80px;
+}
+
+.points-row {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.15));
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.points-value {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #06b6d4;
+    text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+.points-value i {
+    color: #06b6d4;
+}
+
+/* ===== 积分历史记录样式 ===== */
+.points-history-list {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.points-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.points-history-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.points-info {
+    flex: 1;
+}
+
+.points-amount {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.points-amount.increase {
+    color: #86efac;
+}
+
+.points-amount.decrease {
+    color: #fca5a5;
+}
+
+.points-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    margin-top: var(--spacing-xs);
+}
+
+.points-date {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8125rem;
+    text-align: right;
+}
+
+/* ===== 充值记录样式 ===== */
+.recharge-records-list {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.recharge-record-item {
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.recharge-record-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+}
+
+.recharge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.recharge-order {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.recharge-status {
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.recharge-status.paid {
+    background: rgba(34, 197, 94, 0.2);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.recharge-status.pending {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.recharge-status.failed {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.recharge-status.cancelled {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.recharge-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recharge-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #06b6d4;
+}
+
+.recharge-points {
+    color: #86efac;
+    font-weight: 600;
+}
+
+.recharge-date {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8125rem;
+}
+
+/* ===== 密码修改表单样式 ===== */
+.password-form {
+    max-width: 100%;
+    padding: var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    display: grid;
+    gap: var(--spacing-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.password-form .form-group {
+    margin-bottom: 0;
+}
+
+.password-form label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+}
+
+.password-form .form-control {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.password-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.password-form .form-control:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.password-form .btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: var(--spacing-sm);
+}
+
+/* ===== 空状态样式 ===== */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+    color: #06b6d4;
+}
+
+/* ===== 分页样式 ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-lg);
+}
+
+.pagination .page-btn {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.pagination .page-btn:hover {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.pagination .page-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.pagination .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination .page-btn:disabled:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+    /* 用户信息响应式 */
+    .profile-info {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-md);
+    }
+
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 2.25rem;
+    }
+
+    .profile-details {
+        width: 100%;
+        gap: var(--spacing-sm);
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-xs);
+        text-align: center;
+    }
+
+    .info-row label {
+        min-width: auto;
+        font-size: 0.875rem;
+    }
+
+    .points-row {
+        flex-direction: column;
+        align-items: center;
+        padding: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .points-value {
+        font-size: 1.25rem;
+    }
+
+    /* 列表响应式 */
+    .points-history-item,
+    .recharge-record-item {
+        padding: var(--spacing-sm);
+    }
+
+    .points-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .points-description {
+        font-size: 0.8125rem;
+        word-break: break-word;
+    }
+
+    .points-date {
+        font-size: 0.75rem;
+        margin-left: var(--spacing-sm);
+    }
+
+    .recharge-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .recharge-order {
+        font-size: 0.875rem;
+        word-break: break-all;
+    }
+
+    .recharge-status {
+        font-size: 0.6875rem;
+        padding: 3px 10px;
+    }
+
+    .recharge-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+
+    .recharge-amount {
+        font-size: 1.125rem;
+    }
+
+    .recharge-points {
+        font-size: 0.875rem;
+    }
+
+    .recharge-date {
+        font-size: 0.75rem;
+    }
+
+    /* 密码表单响应式 */
+    .password-form {
+        padding: var(--spacing-md);
+    }
+
+    .password-form label {
+        font-size: 0.8125rem;
+    }
+
+    .password-form .form-control {
+        padding: var(--spacing-sm);
+        font-size: 0.9375rem;
+    }
+
+    .password-form .btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9375rem;
+    }
+
+    /* 分页响应式 */
+    .pagination {
+        gap: 4px;
+    }
+
+    .pagination .page-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.8125rem;
+        padding: 0 8px;
+    }
+
+    /* 卡片标题响应式 */
+    .card h2 {
+        font-size: 1.125rem;
+    }
+
+    .card h2 i {
+        font-size: 1.125rem;
+    }
+}
+
+/* 小屏幕优化（宽度 ≤ 480px）*/
+@media (max-width: 480px) {
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .points-value {
+        font-size: 1.125rem;
+    }
+}
+
+/* 极小屏幕（宽度 ≤ 360px）*/
+@media (max-width: 360px) {
+    /* 卡片标题响应式优化 */
+    .card > div[style*="display: flex"] {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .card > div[style*="display: flex"] h2 {
+        margin-bottom: 0;
+    }
+
+    .card > div[style*="display: flex"] button {
+        width: 100%;
+        margin-top: var(--spacing-xs);
+    }
+
+    /* 卡片内容padding优化 */
+    .card-content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* 加载动画 */
+.loading {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #6366f1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

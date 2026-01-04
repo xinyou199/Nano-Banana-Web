@@ -1,0 +1,14 @@
+﻿通用高清修复提示词：
+Please perform a 4K high-definition redraw of this image. Focus on enhancing the micro-details and textures to a professional cinematic standard. Crucially, identify and eliminate any abnormal pixels, seams, or tiling artifacts at the segment edges. Ensure the entire composition is seamless, with perfectly smooth transitions and consistent lighting across the frame. Reconstruct any blurred areas with sharp, realistic details.
+
+脸部修复专用高清修复提示词：
+I have provided two images. Image 1 is the target image that needs 4K high-definition redrawing and repair. Image 2 is the reference for the character’s face.
+
+Your Task:
+
+Facial Restoration: Please reconstruct the face of the character in Image 1, using the facial features, skin texture, and identity details from Image 2 as the absolute reference. Ensure the person’s identity is consistent with Image 2.
+Seamless Integration: Blend the new face perfectly into the head and neck of Image 1, ensuring matching skin tones, shadows, and lighting.
+Edge & Artifact Repair: Fix all abnormal pixels, visible seams, and tiling artifacts caused by previous image segmentation in Image 1. The entire image must be seamless.
+4K Enhancement: Upscale the final result to 4K resolution with professional cinematic clarity, sharp textures, and zero digital noise.
+Deliver a polished, hyper-realistic masterpiece where the face from Image 2 and the body/background from Image 1 are perfectly unified.
+

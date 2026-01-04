@@ -1,0 +1,13 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/.vs
+/GoogleAI/bin
+/GoogleAI/.vs
+/GoogleAI/.config
+/GoogleAI/obj
+/GoogleAI/Properties/PublishProfiles
+/GoogleAI/wwwroot/uploads
+/GoogleAI/ScreenShot_2025-12-11_153456_709.png
+/GoogleAI/GoogleAI1209-5.rar

@@ -1,0 +1,511 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "灵绘智影AI创作平台";
+    ViewBag.PageTitle = "灵绘智影AI创作平台";
+    ViewBag.CurrentPage = "drawing";
+    ViewBag.Username = "admin";
+}
+
+<!-- 使用统一导航栏部分视图 -->
+@await Html.PartialAsync("_Navigation")
+
+<!-- 内容区域 -->
+<div class="main-content-wrapper">
+    <!-- AI绘图内容 -->
+    <div id="drawing-content" class="main-content active">
+        <div class="drawing-container" style="display: grid; grid-template-columns: 30% 1fr; gap: 10px;">
+            <!-- 左侧：输入配置区 -->
+            <div class="drawing-input">
+                <div class="card fixed-height">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                            <i class="fas fa-cog"></i> 创作配置
+                        </h2>
+                        <button id="executeBtn" class="btn btn-primary" onclick="executeDrawing()" style="box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                            <i class="fas fa-magic"></i> 开始生成
+                        </button>
+                    </div>
+
+                    <div class="card-content">
+                        <!-- 模型选择 -->
+                        <div class="form-group">
+                            <label for="model-select">
+                                <i class="fas fa-robot"></i> AI模型
+                            </label>
+                            <select id="model-select" class="form-control">
+                                <option value="">加载中...</option>
+                            </select>
+                        </div>
+
+                        <!-- 处理模式选择 -->
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-layer-group"></i> 处理模式
+                            </label>
+                            <div class="mode-grid">
+                                <button class="nav-tab active" onclick="switchMode('generate')">
+                                    <i class="fas fa-magic"></i>
+                                    <span>图片生成</span>
+                                </button>
+                                <button class="nav-tab" onclick="switchMode('localEdit')">
+                                    <i class="fas fa-edit"></i>
+                                    <span>局部编辑</span>
+                                </button>
+                                <button class="nav-tab" onclick="switchMode('fusion')">
+                                    <i class="fas fa-blender"></i>
+                                    <span>图像融合</span>
+                                </button>
+                                <button class="nav-tab" onclick="switchMode('textEdit')">
+                                    <i class="fas fa-font"></i>
+                                    <span>文本编辑</span>
+                                </button>
+                                <button class="nav-tab" onclick="switchMode('consistency')">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>一致性生成</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 图片生成模式 -->
+                        <div id="generateMode" class="mode-content">
+                            <div class="form-group">
+                                <label for="prompt">
+                                    <i class="fas fa-pen-fancy"></i> 创意描述
+                                </label>
+                                <textarea id="prompt" class="form-control" rows="4"
+                                          placeholder="详细描述您想要创作的图片，例如：一个可爱的中国小女孩坐在窗台上，温暖的阳光透过窗帘洒进来，旁边有一盆绿植，温馨治愈的画风..."></textarea>
+                            </div>
+
+                            <!-- 图片比例设置 -->
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-expand-arrows-alt"></i> 图片比例
+                                </label>
+                                <div class="aspect-ratio-container">
+                                    <div class="aspect-ratio-preset">
+                                        <select id="aspectRatioPreset" class="form-control" onchange="handleAspectRatioPresetChange()">
+                                            <option value="9:16">竖屏 9:16（手机壁纸）</option>
+                                            <option value="3:4">竖向 3:4（小红书）</option>
+                                            <option value="1:1">正方形 1:1（头像）</option>
+                                            <option value="4:3">标准 4:3</option>
+                                            <option value="16:9">宽屏 16:9（电脑壁纸）</option>
+                                            <option value="21:9">超宽 21:9（宽屏壁纸）</option>
+                                            <option value="3:2">摄影 3:2</option>
+                                            <option value="2:3">竖摄影 2:3</option>
+                                            <option value="custom">自定义比例</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="customAspectRatio" class="custom-aspect-ratio" style="display: none;">
+                                        <div class="aspect-ratio-inputs">
+                                            <input type="number" id="aspectWidth" class="form-control" placeholder="宽度" min="1" max="100" value="16">
+                                            <span class="aspect-ratio-separator">:</span>
+                                            <input type="number" id="aspectHeight" class="form-control" placeholder="高度" min="1" max="100" value="9">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-images"></i> 参考图片（可选，支持多张）
+                                </label>
+                                <div class="image-upload-area" onclick="document.getElementById('referenceImage').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>点击或拖拽上传参考图片</p>
+                                    <p style="font-size: 0.8125rem; color: var(--text-muted);">支持 JPG、PNG 格式，可同时选择多张</p>
+                                </div>
+                                <input type="file" id="referenceImage" accept="image/*" multiple style="display: none;">
+                                <div id="referencePreviewContainer" class="image-preview-container" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <!-- 局部编辑模式 -->
+                        <div id="localEditMode" class="mode-content" style="display: none;">
+                            <div class="form-group">
+                                <label for="localEditPrompt">
+                                    <i class="fas fa-pen"></i> 编辑指令
+                                </label>
+                                <textarea id="localEditPrompt" class="form-control" rows="3"
+                                          placeholder="例如：移除背景中的路人、给这件衬衫添加蓝色条纹、修复照片中的划痕..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-image"></i> 要编辑的图片
+                                </label>
+                                <div class="image-upload-area" onclick="document.getElementById('localEditImage').click()">
+                                    <i class="fas fa-edit"></i>
+                                    <p>上传需要编辑的图片</p>
+                                    <p style="font-size: 0.8125rem; color: var(--text-muted);">上传后可以选择要编辑的区域</p>
+                                </div>
+                                <input type="file" id="localEditImage" accept="image/*" style="display: none;">
+                                <canvas id="localEditCanvas" style="display: none; max-width: 100%; border: 2px solid var(--primary-color); border-radius: var(--radius-lg); cursor: crosshair; margin-top: var(--spacing-md);"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 图像融合模式 -->
+                        <div id="fusionMode" class="mode-content" style="display: none;">
+                            <div class="form-group">
+                                <label for="fusionPrompt">
+                                    <i class="fas fa-blender"></i> 融合指令
+                                </label>
+                                <textarea id="fusionPrompt" class="form-control" rows="3"
+                                          placeholder="例如：将第二张图的艺术风格应用到第一张图、将人物融入新场景、混合两张图的色彩和纹理..."></textarea>
+                            </div>
+                            <div class="settings-grid">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label>
+                                        <i class="fas fa-image"></i> 主图像
+                                    </label>
+                                    <div class="image-upload-area" onclick="document.getElementById('fusionMainImage').click()">
+                                        <i class="fas fa-image"></i>
+                                        <p>上传主图像</p>
+                                    </div>
+                                    <input type="file" id="fusionMainImage" accept="image/*" style="display: none;">
+                                    <img id="fusionMainPreview" class="image-preview" style="display: none;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label>
+                                        <i class="fas fa-images"></i> 融合图像
+                                    </label>
+                                    <div class="image-upload-area" onclick="document.getElementById('fusionSecondImage').click()">
+                                        <i class="fas fa-images"></i>
+                                        <p>上传要融合的图像</p>
+                                    </div>
+                                    <input type="file" id="fusionSecondImage" accept="image/*" style="display: none;">
+                                    <img id="fusionSecondPreview" class="image-preview" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 文本编辑模式 -->
+                        <div id="textEditMode" class="mode-content" style="display: none;">
+                            <div class="form-group">
+                                <label for="textEditPrompt">
+                                    <i class="fas fa-font"></i> 文本编辑指令
+                                </label>
+                                <textarea id="textEditPrompt" class="form-control" rows="3"
+                                          placeholder="例如：将海报标题改为'新品上市'、修改产品包装上的文字为新品牌名、更换店铺招牌文字..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-file-image"></i> 包含文字的图像
+                                </label>
+                                <div class="image-upload-area" onclick="document.getElementById('textEditImage').click()">
+                                    <i class="fas fa-file-text"></i>
+                                    <p>上传包含文字的图片</p>
+                                    <p style="font-size: 0.8125rem; color: var(--text-muted);">支持海报、标签、招牌等文字图片</p>
+                                </div>
+                                <input type="file" id="textEditImage" accept="image/*" style="display: none;">
+                                <img id="textEditPreview" class="image-preview" style="display: none;">
+                            </div>
+                        </div>
+
+                        <!-- 一致性生成模式 -->
+                        <div id="consistencyMode" class="mode-content" style="display: none;">
+                            <div class="form-group">
+                                <label for="consistencyPrompt">
+                                    <i class="fas fa-sync-alt"></i> 一致性生成指令
+                                </label>
+                                <textarea id="consistencyPrompt" class="form-control" rows="3"
+                                          placeholder="例如：保持相同角色但改变背景为森林、让角色做跳跃动作、在新场景中保持相同的艺术风格..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-user-friends"></i> 参考角色/场景
+                                </label>
+                                <div class="image-upload-area" onclick="document.getElementById('consistencyRefImage').click()">
+                                    <i class="fas fa-user-circle"></i>
+                                    <p>上传参考角色或场景图片</p>
+                                    <p style="font-size: 0.8125rem; color: var(--text-muted);">用于保持风格和角色一致性</p>
+                                </div>
+                                <input type="file" id="consistencyRefImage" accept="image/*" style="display: none;">
+                                <img id="consistencyRefPreview" class="image-preview" style="display: none;">
+                            </div>
+                        </div>
+
+                        <!-- 提示词模板区域 -->
+                        <div class="form-group template-section" style="margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 2px solid var(--border-color);">
+                            <div class="template-header">
+                                <label style="margin-bottom: var(--spacing-sm);">
+                                    <i class="fas fa-bookmark"></i> 提示词模板
+                                </label>
+                                <div class="template-buttons">
+                                    <button class="btn btn-secondary" onclick="addCustomTemplate()">
+                                        <i class="fas fa-plus"></i> <span>添加</span>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="importTemplates()">
+                                        <i class="fas fa-upload"></i> <span>导入</span>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="exportTemplates()">
+                                        <i class="fas fa-download"></i> <span>导出</span>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetTemplates()">
+                                        <i class="fas fa-undo"></i> <span>重置</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="promptTemplates" class="prompt-templates">
+                                <!-- 模板将通过JavaScript动态生成 -->
+                            </div>
+                            <input type="file" id="templateImport" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：任务列表区 -->
+            <div class="drawing-output">
+                <div class="card fixed-height">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                            <i class="fas fa-tasks"></i> 任务列表
+                        </h2>
+                        <div style="display: flex; gap: var(--spacing-xs);">
+                            <button class="btn btn-secondary" onclick="refreshTaskList()" style="font-size: 0.875rem; padding: 8px 16px;">
+                                <i class="fas fa-sync-alt"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div id="taskListContainer">
+                            <div class="empty-state">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                <p>暂无任务</p>
+                                <p style="font-size: 0.875rem; margin-top: var(--spacing-sm);">提交绘图任务后将在此显示</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创作历史内容 -->
+    <div id="history-content" class="main-content">
+        <div class="card fixed-height">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: var(--spacing-md);">
+                <div>
+                    <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                        <i class="fas fa-images"></i> 我的作品集
+                    </h2>
+                </div>
+                <div class="header-user-actions">
+                    <button class="btn btn-secondary" onclick="loadHistory()">
+                        <i class="fas fa-sync-alt"></i> <span class="btn-text">刷新</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="history-gallery" id="historyGallery">
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>正在加载历史记录...</p>
+                    </div>
+                </div>
+
+                <div class="pagination-container" id="paginationContainer" style="display: none; margin-top: 20px; text-align: center;">
+                    <div class="pagination" id="pagination"></div>
+                    <div class="pagination-info" id="paginationInfo" style="margin-top: 10px; color: var(--text-secondary); font-size: 0.875rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图片预览模态框 -->
+<div id="imageModal" class="image-modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeImageModal()">&times;</span>
+        <img id="modalImage" src="" alt="预览图片" style="max-width: 100%; max-height: calc(85vh - 120px); border-radius: var(--radius-lg);">
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="downloadModalImage()">
+                <i class="fas fa-download"></i> 下载原图
+            </button>
+            <button class="btn btn-secondary" onclick="closeImageModal()">
+                <i class="fas fa-times"></i> 关闭
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 移动端回到顶部按钮 -->
+<button id="scrollToTopBtn" class="scroll-to-top-btn" onclick="scrollToTop()" title="回到顶部">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- 拆分重绘模态框 -->
+<div id="splitUpscaleModal" class="modal" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-th"></i> 拆分高清重绘</h3>
+                <button class="close-btn" onclick="closeSplitModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 处理模式选择 -->
+                <div class="form-group">
+                    <label><i class="fas fa-cogs"></i> 处理模式</label>
+                    <div class="process-mode-selector">
+                        <label class="mode-radio-compact">
+                            <input type="radio" name="processMode" value="split-upscale" checked onchange="switchProcessMode('split-upscale')">
+                            <span>拆分重绘</span>
+                        </label>
+                        <label class="mode-radio-compact">
+                            <input type="radio" name="processMode" value="split-only" onchange="switchProcessMode('split-only')">
+                            <span>仅拆分</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 容差设置（仅在仅拆分模式显示） -->
+                <div class="form-group" id="toleranceGroup" style="display: none;">
+                    <label for="toleranceInput">
+                        <i class="fas fa-sliders-h"></i> 容差（Tolerance）
+                    </label>
+                    <div class="tolerance-input-group">
+                        <input type="range" id="toleranceSlider" min="0.01" max="0.1" step="0.01" value="0.02" 
+                               onchange="updateToleranceValue(this.value)">
+                        <input type="number" id="toleranceInput" min="0.01" max="0.1" step="0.01" value="0.02" 
+                               onchange="updateToleranceValue(this.value)">
+                    </div>
+                    <small style="color: var(--text-secondary);">
+                        容差值用于图片分割的边界处理，范围 0.01-0.1，默认 0.02。值越小边界越精确。
+                    </small>
+                </div>
+
+                <!-- 拆分模式选择 -->
+                <div class="form-group">
+                    <label><i class="fas fa-grid"></i> 拆分模式</label>
+                    <div class="split-mode-selector">
+                        <button class="mode-btn" data-mode="2x2" onclick="selectSplitMode('2x2')">2×2 (4块)</button>
+                        <button class="mode-btn active" data-mode="3x3" onclick="selectSplitMode('3x3')">3×3 (9块)</button>
+                        <button class="mode-btn" data-mode="4x4" onclick="selectSplitMode('4x4')">4×4 (16块)</button>
+                    </div>
+                </div>
+
+                <!-- 九宫格预览 -->
+                <div class="form-group">
+                    <label><i class="fas fa-check-square"></i> 选择要重绘的分块</label>
+                    <div id="splitGridContainer" class="split-grid-container">
+                        <!-- 九宫格将通过JS动态生成 -->
+                    </div>
+                    <div class="split-grid-hint">
+                        <i class="fas fa-info-circle"></i> 点击分块进行选择/取消选择
+                    </div>
+                </div>
+
+                <!-- 模型选择 -->
+                <div class="form-group">
+                    <label><i class="fas fa-robot"></i> 重绘模型</label>
+                    <select id="splitModelSelect" class="form-control">
+                        <!-- 将通过JS动态加载 -->
+                    </select>
+                </div>
+
+                <!-- 脸部参考图选择 -->
+                <div class="form-group">
+                    <label><i class="fas fa-user-circle"></i> 脸部参考图（可选）</label>
+                    <div id="faceReferenceContainer">
+                        <!-- 将通过JS动态生成 -->
+                    </div>
+                    <div class="split-grid-hint">
+                        <i class="fas fa-info-circle"></i> 选择原始任务的参考图作为脸部参考，用于高清重绘时保持人脸一致性
+                    </div>
+                </div>
+
+                <!-- 积分消耗提示 -->
+                <div class="cost-summary">
+                    <div class="cost-item">
+                        <span>已选分块：</span>
+                        <strong id="selectedBlockCount">0</strong> 块
+                    </div>
+                    <div class="cost-item">
+                        <span>单块积分：</span>
+                        <strong id="perBlockCost">0</strong> 积分
+                    </div>
+                    <div class="cost-item total">
+                        <span>总计消耗：</span>
+                        <strong id="totalCost">0</strong> 积分
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSplitModal()">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+                <button class="btn btn-primary" onclick="submitSplitUpscale()" id="submitSplitBtn">
+                    <i class="fas fa-magic"></i> 开始重绘
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量任务进度模态框 -->
+<div id="batchProgressModal" class="modal" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-tasks"></i> 批量重绘进度</h3>
+                <button class="close-btn" onclick="closeBatchProgressModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="batch-progress-summary">
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">总分块</div>
+                            <div class="stat-value" id="batchTotalBlocks">0</div>
+                        </div>
+                        <div class="stat-item success">
+                            <div class="stat-label">已完成</div>
+                            <div class="stat-value" id="batchCompletedBlocks">0</div>
+                        </div>
+                        <div class="stat-item processing">
+                            <div class="stat-label">处理中</div>
+                            <div class="stat-value" id="batchProcessingBlocks">0</div>
+                        </div>
+                        <div class="stat-item pending">
+                            <div class="stat-label">等待中</div>
+                            <div class="stat-value" id="batchPendingBlocks">0</div>
+                        </div>
+                        <div class="stat-item error">
+                            <div class="stat-label">失败</div>
+                            <div class="stat-value" id="batchFailedBlocks">0</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="batchProgressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text" id="batchProgressText">0%</div>
+                    </div>
+                </div>
+                
+                <div id="batchBlocksList" class="batch-blocks-list">
+                    <!-- 分块详情将通过JS动态生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBatchProgressModal()">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+                <button class="btn btn-primary" onclick="refreshBatchProgress()" id="refreshBatchBtn">
+                    <i class="fas fa-sync-alt"></i> 刷新进度
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/auth.js"></script>
+    <script src="~/js/multi-image-support.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/split-upscale.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/split-upscale.css" />
+}

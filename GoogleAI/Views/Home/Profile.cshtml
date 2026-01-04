@@ -1,0 +1,156 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "用户信息";
+    ViewBag.PageTitle = "用户信息";
+    ViewBag.CurrentPage = "profile";
+    ViewBag.Username = "admin";
+}
+
+<!-- 使用统一导航栏部分视图 -->
+@await Html.PartialAsync("_Navigation")
+
+<!-- 内容区域 -->
+<div class="main-content-wrapper">
+    <div class="profile-container">
+        <!-- 签到卡片 -->
+        <div class="card">
+            <div class="check-in-card">
+                <div class="check-in-content">
+                    <div class="check-in-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="check-in-title">每日签到</div>
+                    <div class="check-in-points">
+                        <i class="fas fa-gem"></i>
+                        <span id="check-in-daily-points">10</span> <span>积分</span>
+                    </div>
+                    <div class="check-in-stats">
+                        <div class="check-in-stat">
+                            <div class="check-in-stat-value" id="check-in-consecutive-days">0</div>
+                            <div class="check-in-stat-label">连续签到天数</div>
+                        </div>
+                        <div class="check-in-stat">
+                            <div class="check-in-stat-value" id="check-in-last-date">-</div>
+                            <div class="check-in-stat-label">上次签到</div>
+                        </div>
+                    </div>
+                    <button class="btn-check-in" id="btn-check-in" onclick="checkIn()">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>立即签到</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户基本信息卡片 -->
+        <div class="card">
+            <h2><i class="fas fa-info-circle"></i> 基本信息</h2>
+            <div class="card-content">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-details">
+                        <div class="info-row">
+                            <label>用户名：</label>
+                            <span id="profile-username">加载中...</span>
+                        </div>
+                        <div class="info-row">
+                            <label>邮箱：</label>
+                            <span id="profile-email">加载中...</span>
+                        </div>
+                        <div class="info-row">
+                            <label>注册时间：</label>
+                            <span id="profile-created">加载中...</span>
+                        </div>
+                        <div class="info-row points-row">
+                            <label>当前积分：</label>
+                            <span class="points-value">
+                                <i class="fas fa-gem"></i>
+                                <span id="profile-points">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 积分变动明细 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                    <i class="fas fa-chart-line"></i> 积分变动明细
+                </h2>
+                <button class="btn btn-secondary" onclick="loadPointsHistory()">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+            </div>
+            <div class="card-content">
+                <div id="points-history-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+                <div class="pagination-container" id="points-pagination" style="display: none; margin-top: 20px; text-align: center;">
+                    <div class="pagination" id="points-pagination-nav"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 充值记录 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                    <i class="fas fa-receipt"></i> 充值记录
+                </h2>
+                <button class="btn btn-secondary" onclick="loadRechargeRecords()">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+            </div>
+            <div class="card-content">
+                <div id="recharge-records-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+                <div class="pagination-container" id="recharge-pagination" style="display: none; margin-top: 20px; text-align: center;">
+                    <div class="pagination" id="recharge-pagination-nav"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 密码修改 -->
+        <div class="card">
+            <h2><i class="fas fa-lock"></i> 密码修改</h2>
+            <div class="card-content">
+                <form id="change-password-form" class="password-form">
+                    <div class="form-group">
+                        <label for="old-password">旧密码</label>
+                        <input type="password" id="old-password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">新密码</label>
+                        <input type="password" id="new-password" class="form-control" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">确认新密码</label>
+                        <input type="password" id="confirm-password" class="form-control" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 修改密码
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/auth.js"></script>
+    <script src="~/js/profile.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

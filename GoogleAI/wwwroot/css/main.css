@@ -1,0 +1,1402 @@
+﻿/* ===== 整合顶部导航样式 ===== */
+
+
+/* 顶部容器 - 整合布局 */
+.header-integrated {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 0;
+    padding: 12px 20px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--spacing-lg);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* 左侧标题 */
+.header-left h1 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .header-left h1 i {
+        font-size: 1.75rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+/* 中间导航标签 */
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+}
+
+/* ===== 头部功能导航按钮 - 统一玻璃态风格 ===== */
+.main-nav-tabs-integrated {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.main-nav-tab-integrated {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.15); /* 半透明白色背景 */
+    backdrop-filter: blur(10px); /* 毛玻璃效果 */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 半透明边框 */
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+    .main-nav-tab-integrated i {
+        font-size: 1.125rem;
+    }
+    /* Hover效果 */
+    .main-nav-tab-integrated:hover:not(.disabled) {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    /* 选中状态 */
+    .main-nav-tab-integrated.active {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    /* 禁用状态（敬请期待） */
+    .main-nav-tab-integrated.disabled {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        cursor: not-allowed;
+    }
+
+        .main-nav-tab-integrated.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: rgba(255, 255, 255, 0.08);
+        }
+    /* 敬请期待徽章 */
+    .main-nav-tab-integrated .badge-soon {
+        display: inline-block;
+        padding: 2px 6px;
+        background: rgba(255, 165, 0, 0.3); /* 橙色半透明 */
+        border-radius: 4px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        margin-left: 4px;
+    }
+/* ===== 响应式设计 ===== */
+@media (max-width: 767px) {
+    .main-nav-tabs-integrated {
+        gap: 8px;
+    }
+
+    .main-nav-tab-integrated {
+        padding: 8px 14px;
+        font-size: 0.8125rem;
+        border-radius: 6px;
+    }
+
+        .main-nav-tab-integrated i {
+            font-size: 1rem;
+        }
+
+        .main-nav-tab-integrated .badge-soon {
+            font-size: 0.625rem;
+            padding: 2px 4px;
+        }
+
+    /* 🔧 修复：移动端【开始生成】按钮位置 - 改进方案 */
+    .drawing-input .card > div:first-child {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        width: 100%; /* 确保容器宽度 */
+        box-sizing: border-box; /* 包含内边距在宽度内 */
+    }
+
+    /* 标题区域 - 允许压缩但不换行 */
+    .drawing-input .card h2 {
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* 文字过长显示省略号 */
+        flex: 0 1 auto; /* 允许缩小，但优先保持原大小 */
+        min-width: 0; /* 允许缩小到0 */
+        margin: 0;
+    }
+
+    /* 按钮 - 固定大小，不压缩 */
+    .drawing-input #executeBtn {
+        font-size: 0.75rem !important;
+        /*padding: 6px 12px !important;*/
+        white-space: nowrap;
+        flex-shrink: 0; /* 不压缩 */
+        min-width: auto;
+        max-width: 100px;
+        box-shadow: none !important; /* 移除阴影避免溢出视觉 */
+    }
+
+    /* 如果还是太挤，进一步精简标题 */
+    .drawing-input .card h2 i {
+        font-size: 0.9rem; /* 缩小图标 */
+        margin-right: 4px;
+    }
+
+    /* 🔧 新增：修复任务列表标题栏【刷新】按钮位置 - 保持一行 */
+    .drawing-output .card > div:first-child {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important; /* 强制不换行 */
+        gap: 6px !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 任务列表标题 */
+    .drawing-output .card h2 {
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 0 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    /* 任务列表刷新按钮 */
+    .drawing-output .card > div:first-child > div {
+        flex-shrink: 0; /* 按钮容器不压缩 */
+    }
+
+    .drawing-output .card > div:first-child .btn {
+        font-size: 0.75rem !important;
+        padding: 6px 10px !important;
+        white-space: nowrap;
+        box-shadow: none !important;
+    }
+
+    /* 缩小图标，腾出空间 */
+    .drawing-output .card h2 i {
+        font-size: 0.9rem;
+        margin-right: 4px;
+    }
+
+    /* 🔧 新增：移动端顶部导航按钮居中显示 */
+    .header-center {
+        justify-content: center !important; /* 居中对齐 */
+    }
+
+    .main-nav-tabs-integrated {
+        justify-content: center !important; /* 按钮容器也居中 */
+        width: 100%;
+        gap: 6px; /* 保持间距 */
+        overflow-x: auto; /* 如果超宽允许横向滚动 */
+        padding: 3px;
+        /* 隐藏滚动条但保留滚动功能 */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+
+        /* 隐藏webkit浏览器的滚动条 */
+        .main-nav-tabs-integrated::-webkit-scrollbar {
+            display: none;
+        }
+
+    /* 确保按钮不会太小 */
+    .main-nav-tab-integrated {
+        min-width: 70px; /* 最小宽度 */
+        padding: 10px 12px;
+        font-size: 0.8125rem;
+        flex-direction: column;
+        gap: 4px;
+        flex-shrink: 0; /* 按钮不被压缩 */
+    }
+
+        .main-nav-tab-integrated i {
+            font-size: 1rem;
+        }
+
+        .main-nav-tab-integrated span {
+            font-size: 0.75rem;
+        }
+}
+
+@media (max-width: 480px) {
+    .main-nav-tab-integrated {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+        .main-nav-tab-integrated i {
+            font-size: 0.875rem;
+        }
+
+        .main-nav-tab-integrated .badge-soon {
+            display: none; /* 超小屏隐藏徽章 */
+        }
+}
+
+.badge-soon {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--warning-color);
+    color: white;
+    font-size: 0.625rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 右侧用户信息 */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+}
+
+    .user-badge i {
+        font-size: 1.25rem;
+    }
+
+.btn-logout {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+    .btn-logout:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+/* 内容区域 */
+.main-content-wrapper {
+    position: relative;
+}
+
+.main-content {
+    display: none;
+    animation: fadeInContent 0.4s ease-out;
+}
+
+    .main-content.active {
+        display: block;
+    }
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Toast 动画 ===== */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== 卡片布局 ===== */
+.card.fixed-height {
+    min-height: calc(100vh - 90px); /* 改用min-height，允许内容少时不撑满 */
+    max-height: calc(100vh - 90px); /* 最大高度限制，内容多时可滚动 */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* 移动端卡片自适应高度 */
+@media (max-width: 767px) {
+    .card.fixed-height {
+        height: auto;
+        min-height: auto;
+        max-height: none; /* 移动端取消最大高度限制 */
+    }
+
+    .card-content {
+        overflow-y: visible;
+    }
+}
+
+/* ===== 任务列表优化 V3 - 融合提示词 + 现代化按钮 ===== */
+
+.task-item {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 14px;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    .task-item:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+        transform: translateY(-2px);
+    }
+
+/* ===== 任务头部样式优化 ===== */
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.task-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.task-id-inline,
+.task-time-inline {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+    .task-id-inline::before {
+        content: '·';
+        margin: 0 4px;
+    }
+
+    .task-time-inline::before {
+        content: '·';
+        margin: 0 4px;
+    }
+
+/* 删除按钮样式 */
+.btn-delete-task {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+    .btn-delete-task:hover {
+        background: #dc3545;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-delete-task i {
+        font-size: 0.875rem;
+    }
+
+/* ===== 融合式提示词区域（彻底修复溢出）===== */
+/* ===== 融合式提示词区域 ===== */
+.task-prompt-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(168, 85, 247, 0.03));
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin: 12px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    .task-prompt-box:hover {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(168, 85, 247, 0.06));
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+.task-prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    width: 100%;
+}
+
+/* 提示词预览区域 */
+.prompt-preview {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+/* 提示词标签（图标+文字）*/
+.prompt-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+    .prompt-label i {
+        font-size: 0.875rem;
+    }
+
+.label-text {
+    font-weight: 600;
+}
+
+/* 提示词预览文本 */
+.prompt-preview > span {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.prompt-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.08);
+    transition: all 0.2s ease;
+}
+
+    .prompt-toggle-btn:hover {
+        background: rgba(99, 102, 241, 0.15);
+    }
+
+    .prompt-toggle-btn i {
+        transition: transform 0.3s ease;
+        font-size: 0.75rem;
+    }
+
+    .prompt-toggle-btn.expanded i {
+        transform: rotate(180deg);
+    }
+
+/* 展开后的提示词内容 - 强制正常文本流 */
+.task-prompt-content {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: rgba(99, 102, 241, 0.02);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(99, 102, 241, 0.08);
+    font-size: 0.875rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: plaintext !important;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    /* 🔧 新增：允许文本选择 */
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    cursor: text; /* 鼠标指针显示为文本选择样式 */
+    display: block !important;
+}
+
+    .task-prompt-content.collapsed {
+        display: none !important;
+        max-height: 0;
+        margin-top: 0;
+        padding: 0;
+        border: none;
+        overflow: hidden;
+        opacity: 0;
+    }
+
+
+/* ===== 现代化操作按钮 - 工具栏样式 ===== */
+.task-actions-modern {
+    display: flex !important;
+    justify-content: flex-start; /* 左对齐，不撑满 */
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    flex-wrap: wrap; /* 允许换行 */
+    width: auto; /* 改为auto，不撑满容器 */
+    box-sizing: border-box;
+}
+
+.action-btn {
+    display: inline-flex; /* 改为inline-flex，宽度自适应 */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px; /* 调整padding，更紧凑 */
+    border: 1.5px solid;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    background: white;
+    min-width: auto; /* 移除最小宽度限制 */
+    flex: 0 0 auto; /* 不伸缩，保持内容宽度 */
+}
+
+    .action-btn i {
+        font-size: 0.9375rem;
+    }
+
+    .action-btn span {
+        font-size: 0.875rem;
+    }
+
+/* 复制按钮 - 蓝色 */
+.action-btn-copy {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+    .action-btn-copy:hover {
+        background: #3b82f6;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+/* 下载按钮 - 紫色 */
+.action-btn-download {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+    .action-btn-download:hover {
+        background: #8b5cf6;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+/* 查看按钮 - 青色 */
+.action-btn-view {
+    border-color: #06b6d4;
+    color: #06b6d4;
+}
+
+    .action-btn-view:hover {
+        background: #06b6d4;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
+
+/* 刷新按钮 - 橙色 */
+.action-btn-refresh {
+    border-color: #f59e0b;
+    color: #f59e0b;
+}
+
+    .action-btn-refresh:hover {
+        background: #f59e0b;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+/* ===== 响应式设计 - 桌面端保持flex一行显示 ===== */
+@media (min-width: 768px) {
+    .task-actions-modern {
+        display: flex !important;
+        flex-wrap: wrap !important; /* 允许换行 */
+        gap: 10px !important;
+        width: auto !important; /* 不撑满容器 */
+    }
+
+    .action-btn {
+        flex: 0 0 auto !important; /* 确保按钮不被拉伸 */
+    }
+}
+
+/* ===== 响应式设计 - 移动端保持横排，但按钮更紧凑 ===== */
+@media (max-width: 767px) {
+    .task-actions-modern {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        overflow-x: auto; /* 如果太宽允许横向滚动 */
+        width: 100%; /* 移动端保持全宽 */
+    }
+
+    .action-btn {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 60px; /* 最小宽度 */
+        flex: 1 1 0; /* 移动端平均分配空间 */
+    }
+
+        .action-btn i {
+            font-size: 0.95rem;
+        }
+
+        .action-btn span {
+            font-size: 0.65rem;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+}
+
+/* ===== 超小屏幕优化 ===== */
+@media (max-width: 374px) {
+    .action-btn {
+        padding: 6px 4px;
+    }
+
+        .action-btn i {
+            font-size: 0.9rem;
+        }
+
+        .action-btn span {
+            font-size: 0.65rem;
+        }
+}
+
+
+/* ===== 进度指示器优化 ===== */
+.task-progress-indicator {
+    margin: 12px 0;
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 197, 253, 0.05));
+    border-radius: var(--radius-sm);
+    border-left: 3px solid #3b82f6;
+}
+
+.progress-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid #e5e7eb;
+    border-top: 2.5px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    flex-shrink: 0;
+}
+
+.progress-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.progress-message {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #3b82f6;
+}
+
+.progress-percent {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 3px;
+    transition: width 0.5s ease-out;
+}
+
+/* ===== 错误信息优化 ===== */
+.task-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    margin: 12px 0;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(252, 165, 165, 0.05));
+    border-radius: var(--radius-sm);
+    border-left: 3px solid #ef4444;
+}
+
+    .task-error i {
+        color: #ef4444;
+        font-size: 1rem;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+.error-content {
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+    .error-content strong {
+        color: #ef4444;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .error-content span {
+        color: var(--text-secondary);
+    }
+
+/* ===== 图片容器 ===== */
+.task-image-container {
+    width: 100%;
+    max-height: 400px;
+    background: var(--bg-main);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* 添加相对定位，让浮动按钮可以定位 */
+}
+
+.task-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+    .task-image:hover {
+        transform: scale(1.02);
+    }
+
+/* ===== 任务列表浮动拆分重绘按钮 ===== */
+.task-image-container .floating-split-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    opacity: 0;
+    z-index: 10;
+}
+
+    .task-image-container .floating-split-btn i {
+        font-size: 1rem;
+    }
+
+    .task-image-container .floating-split-btn span {
+        white-space: nowrap;
+    }
+
+/* 鼠标悬停在图片容器时显示按钮 */
+.task-image-container:hover .floating-split-btn {
+    opacity: 1;
+}
+
+.task-image-container .floating-split-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+.task-image-container .floating-split-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+    .task-image-container .floating-split-btn {
+        bottom: 8px;
+        right: 8px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+
+    .task-image-container .floating-split-btn span {
+        display: none;
+    }
+
+    .task-image-container .floating-split-btn i {
+        margin: 0;
+    }
+
+    /* 移动端始终显示按钮 */
+    .task-image-container .floating-split-btn {
+        opacity: 0.9;
+    }
+}
+
+/* ===== 任务元信息 ===== */
+/* 注释掉原有的 .task-meta 相关样式，因为已经不需要了 */
+/*
+.task-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+    .meta-item i {
+        font-size: 0.7rem;
+        opacity: 0.7;
+    }
+*/
+
+/* ===== 任务列表容器 ===== */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ===== 绘图页面布局 ===== */
+.drawing-container {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.drawing-input {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.drawing-output {
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* 响应式调整 - 平板 */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .drawing-container {
+        grid-template-columns: 35% 1fr;
+        gap: 16px;
+    }
+}
+
+/* 响应式调整 - 移动端 - 改为上下布局 */
+@media (max-width: 767px) {
+    .drawing-container {
+        display: grid;
+        grid-template-columns: 1fr !important; /* 强制单列布局 */
+        grid-template-rows: auto auto; /* 两行：输入区 + 输出区 */
+        gap: 12px;
+    }
+
+    .drawing-input {
+        width: 100%;
+    }
+
+    .drawing-output {
+        width: 100%;
+    }
+}
+
+
+
+/* ===== 响应式设计 - 平板 ===== */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .task-image-container {
+        max-height: 400px;
+    }
+
+    .task-image {
+        max-height: 400px;
+    }
+}
+
+/* ===== 响应式设计 - 移动端 ===== */
+@media (max-width: 767px) {
+    /* 不覆盖导航栏样式，让navigation.css的样式生效 */
+
+    /* 任务列表移动端优化 */
+    .task-item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .task-prompt-box {
+        padding: 10px;
+        cursor: pointer;
+    }
+        /* 🔧 新增：提示词内容区域鼠标样式 */
+        .task-prompt-box .task-prompt-content {
+            cursor: text; /* 内容区域显示文本光标 */
+        }
+
+    .prompt-preview {
+        font-size: 0.8125rem;
+    }
+
+    .prompt-toggle-btn {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+    }
+
+    /* 按钮移动端保持一行，改为纵向布局 */
+    .task-actions-modern {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .action-btn {
+        padding: 8px 6px;
+        font-size: 0.75rem;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+        .action-btn i {
+            font-size: 1rem;
+        }
+
+        .action-btn span {
+            font-size: 0.6875rem;
+            line-height: 1.2;
+        }
+
+    .task-image-container {
+        max-height: 300px;
+    }
+
+    .task-image {
+        max-height: 300px;
+    }
+
+    .task-header {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* 移动端任务头部样式调整 */
+    .task-header-left {
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+
+    .task-id-inline,
+    .task-time-inline {
+        font-size: 0.75rem;
+    }
+
+    .btn-delete-task {
+        width: 28px;
+        height: 28px;
+    }
+
+        .btn-delete-task i {
+            font-size: 0.75rem;
+        }
+
+    .task-list {
+        gap: var(--spacing-sm);
+    }
+
+    .card-content {
+        padding: var(--spacing-sm);
+    }
+
+    .task-prompt-box {
+        padding: 10px;
+    }
+
+    .prompt-label {
+        font-size: 0.8125rem;
+        gap: 5px;
+    }
+
+        .prompt-label i {
+            font-size: 0.8125rem;
+        }
+
+    .prompt-preview > span {
+        font-size: 0.8125rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .prompt-toggle-btn {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+    }
+
+    .task-prompt-content {
+        font-size: 0.8125rem;
+        padding: 8px 10px;
+        max-height: 250px;
+    }
+}
+
+/* ===== 超小屏幕优化 ===== */
+@media (max-width: 374px) {
+    .header-integrated {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .header-left h1 {
+        font-size: 1rem;
+    }
+
+        .header-left h1 i {
+            font-size: 1.125rem;
+        }
+
+    .main-nav-tab-integrated {
+        min-width: 60px;
+        padding: 8px 8px;
+    }
+
+        .main-nav-tab-integrated span {
+            display: none;
+        }
+
+        .main-nav-tab-integrated i {
+            font-size: 1.125rem;
+        }
+
+    .user-badge {
+        padding: 6px 10px;
+    }
+
+    .btn-logout {
+        padding: 6px 10px;
+    }
+
+    .task-item {
+        padding: 10px;
+    }
+
+    .action-btn {
+        padding: 6px 4px;
+    }
+
+        .action-btn i {
+            font-size: 0.9rem;
+        }
+
+        .action-btn span {
+            font-size: 0.65rem;
+        }
+
+    .task-image-container {
+        max-height: 250px;
+    }
+
+    .task-image {
+        max-height: 250px;
+    }
+
+    .card-content {
+        padding: 8px;
+    }
+
+    .drawing-input .card h2 {
+        font-size: 0.85rem;
+    }
+
+        /* 隐藏标题图标，腾出空间 */
+        .drawing-input .card h2 i {
+            display: none;
+        }
+
+    .drawing-input #executeBtn {
+        font-size: 0.7rem !important;
+        padding: 5px 10px !important;
+        gap: 3px;
+    }
+
+    /* 任务列表区域 */
+    .drawing-output .card h2 {
+        font-size: 0.85rem;
+    }
+
+        .drawing-output .card h2 i {
+            display: none; /* 隐藏标题图标 */
+        }
+
+    .drawing-output .card > div:first-child .btn {
+        font-size: 0.7rem !important;
+        padding: 5px 8px !important;
+    }
+}
+
+/* 极小屏幕（宽度 ≤ 320px，如iPhone SE第一代）*/
+@media (max-width: 320px) {
+    /* 按钮只显示图标，隐藏文字 */
+    .drawing-input #executeBtn span {
+        display: none;
+    }
+
+    .drawing-input #executeBtn {
+        padding: 6px 10px !important;
+    }
+
+        .drawing-input #executeBtn i {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    /* 任务列表 - 刷新按钮只显示图标 */
+    .drawing-output .card > div:first-child .btn span {
+        display: none;
+    }
+
+    .drawing-output .card > div:first-child .btn {
+        padding: 6px 10px !important;
+    }
+
+        .drawing-output .card > div:first-child .btn i {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+}
+
+/* 为固定的导航栏留出空间 */
+.main-content-wrapper {
+    padding-top: 80px;
+}
+
+/* ===== 移动端回到顶部按钮 ===== */
+.scroll-to-top-btn {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+}
+
+    .scroll-to-top-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+
+    .scroll-to-top-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .scroll-to-top-btn.show {
+        display: flex;
+    }
+
+/* 仅在移动端显示 */
+@media (max-width: 767px) {
+    .scroll-to-top-btn {
+        width: 45px;
+        height: 45px;
+        bottom: 20px;
+        right: 15px;
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-to-top-btn {
+        width: 40px;
+        height: 40px;
+        bottom: 15px;
+        right: 12px;
+        font-size: 1rem;
+    }
+}
+
+/* 桌面端隐藏 */
+@media (min-width: 768px) {
+    .scroll-to-top-btn {
+        display: none !important;
+    }
+}

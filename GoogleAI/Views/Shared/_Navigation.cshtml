@@ -1,0 +1,193 @@
+@* 统一导航栏部分视图 *@
+@{
+    // 从ViewBag获取导航栏配置
+    string pageTitle = ViewBag.PageTitle ?? "AI创作平台";
+    string currentPage = ViewBag.CurrentPage ?? "drawing";
+    string username = ViewBag.Username ?? "admin";
+    string userPoints = ViewBag.UserPoints ?? "0";
+}
+
+<!-- 统一的顶部导航栏 -->
+<div class="header-integrated">
+    <!-- 左侧标题 -->
+    <div class="header-left">
+        <h1>
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <span class="title-text">@pageTitle</span>
+        </h1>
+    </div>
+
+    <!-- 中间导航标签 -->
+    <div class="header-center">
+        <div class="main-nav-tabs-integrated">
+            @if (currentPage != "points" && currentPage != "profile")
+            {
+                <!-- Drawing页面的导航 -->
+                <button class="main-nav-tab-integrated @(currentPage == "drawing" ? "active" : "")" 
+                        data-tab="drawing" onclick="switchMainTab('drawing')">
+                    <i class="fas fa-palette"></i>
+                    <span>AI绘图</span>
+                </button>
+                <button class="main-nav-tab-integrated @(currentPage == "history" ? "active" : "")" 
+                        data-tab="history" onclick="switchMainTab('history')">
+                    <i class="fas fa-history"></i>
+                    <span>创作历史</span>
+                </button>
+                <button class="main-nav-tab-integrated disabled" data-tab="video" onclick="showComingSoon('视频创作')">
+                    <i class="fas fa-video"></i>
+                    <span>视频创作</span>
+                    <span class="badge-soon">敬请期待</span>
+                </button>
+                <button class="main-nav-tab-integrated disabled" data-tab="prompt" onclick="showComingSoon('提示词生成')">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>提示词生成</span>
+                    <span class="badge-soon">敬请期待</span>
+                </button>
+            }
+            else if (currentPage == "points")
+            {
+                <!-- Points页面的导航 -->
+                <button class="main-nav-tab-integrated" data-tab="drawing" onclick="switchToDrawing()">
+                    <i class="fas fa-palette"></i>
+                    <span>返回AI绘图</span>
+                </button>
+            }
+            else if (currentPage == "profile")
+            {
+                <!-- Profile页面的导航 -->
+                <button class="main-nav-tab-integrated" data-tab="drawing" onclick="switchToDrawing()">
+                    <i class="fas fa-palette"></i>
+                    <span>返回AI绘图</span>
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- 右侧用户信息 -->
+    <div class="header-right">
+        @if (currentPage == "drawing")
+        {
+            <a href="/Home/Points" class="user-badge" style="text-decoration: none; cursor: pointer;" title="点击充值积分">
+                <i class="fas fa-gem"></i>
+                <span class="username-text">积分充值</span>
+            </a>
+        }
+        else if (currentPage == "points")
+        {
+            <span id="points-display" class="user-badge points-badge">
+                <i class="fas fa-gem"></i>
+                <span class="points-text">@userPoints 积分</span>
+            </span>
+        }
+        else if (currentPage == "profile")
+        {
+            <a href="/Home/Points" class="user-badge" style="text-decoration: none; cursor: pointer;" title="点击充值积分">
+                <i class="fas fa-gem"></i>
+                <span class="username-text">积分充值</span>
+            </a>
+        }
+
+        <span id="username-display" class="user-badge user-name-badge" style="cursor: pointer;" 
+              onclick="@(currentPage == "profile" ? "return false;" : "switchToProfile()")" 
+              title="@(currentPage == "profile" ? "当前页面" : "点击查看用户信息")">
+            <i class="fas fa-user-circle"></i>
+            <span class="username-text">@username</span>
+        </span>
+
+        <button class="btn btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="btn-text">登出</span>
+        </button>
+
+        <!-- 移动端汉堡菜单按钮 -->
+        <button class="btn-hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</div>
+
+<!-- 移动端菜单面板 -->
+<div class="mobile-menu-panel" id="mobileMenuPanel">
+    <div class="mobile-menu-content">
+        <div class="mobile-menu-header">
+            <h3>
+                <i class="fas fa-wand-magic-sparkles"></i>
+                <span>@pageTitle</span>
+            </h3>
+            <button class="btn-close-menu" onclick="closeMobileMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-body">
+            @if (currentPage != "points" && currentPage != "profile")
+            {
+                <a href="#" class="mobile-menu-item @(currentPage == "drawing" ? "active" : "")" onclick="switchMainTab('drawing'); closeMobileMenu(); return false;">
+                    <i class="fas fa-palette"></i>
+                    <span>AI绘图</span>
+                </a>
+                <a href="#" class="mobile-menu-item @(currentPage == "history" ? "active" : "")" onclick="switchMainTab('history'); closeMobileMenu(); return false;">
+                    <i class="fas fa-history"></i>
+                    <span>创作历史</span>
+                </a>
+                <a href="/Home/Points" class="mobile-menu-item">
+                    <i class="fas fa-gem"></i>
+                    <span>积分充值</span>
+                </a>
+                <a href="#" class="mobile-menu-item" onclick="switchToProfile(); closeMobileMenu(); return false;">
+                    <i class="fas fa-user-circle"></i>
+                    <span>用户信息</span>
+                </a>
+            }
+            else if (currentPage == "points")
+            {
+                <a href="/Home/Drawing" class="mobile-menu-item">
+                    <i class="fas fa-palette"></i>
+                    <span>返回AI绘图</span>
+                </a>
+                <a href="#" class="mobile-menu-item" onclick="switchToProfile(); closeMobileMenu(); return false;">
+                    <i class="fas fa-user-circle"></i>
+                    <span>用户信息</span>
+                </a>
+            }
+            else if (currentPage == "profile")
+            {
+                <a href="/Home/Drawing" class="mobile-menu-item">
+                    <i class="fas fa-palette"></i>
+                    <span>返回AI绘图</span>
+                </a>
+                <a href="/Home/Points" class="mobile-menu-item">
+                    <i class="fas fa-gem"></i>
+                    <span>积分充值</span>
+                </a>
+            }
+            <div class="mobile-menu-divider"></div>
+            <a href="#" class="mobile-menu-item mobile-menu-logout" onclick="logout(); return false;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>登出</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 移动端菜单控制
+    function toggleMobileMenu() {
+        const panel = document.getElementById('mobileMenuPanel');
+        panel.classList.toggle('active');
+    }
+
+    function closeMobileMenu() {
+        const panel = document.getElementById('mobileMenuPanel');
+        panel.classList.remove('active');
+    }
+
+    // 点击菜单外部关闭菜单
+    document.addEventListener('click', function(event) {
+        const panel = document.getElementById('mobileMenuPanel');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        
+        if (!panel.contains(event.target) && !hamburgerBtn.contains(event.target)) {
+            closeMobileMenu();
+        }
+    });
+</script>

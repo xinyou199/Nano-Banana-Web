@@ -1,0 +1,125 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "积分充值";
+    ViewBag.PageTitle = "积分充值";
+    ViewBag.CurrentPage = "points";
+    ViewBag.Username = "admin";
+    ViewBag.UserPoints = "0";
+}
+
+<!-- 使用统一导航栏部分视图 -->
+@await Html.PartialAsync("_Navigation")
+
+<!-- 内容区域 -->
+<div class="main-content-wrapper">
+    <div class="points-container">
+        <!-- 用户积分信息卡片 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                    <div class="points-icon-large">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div>
+                        <h2 style="margin-bottom: var(--spacing-xs); border-bottom: none; padding-bottom: 0;">
+                            我的积分
+                        </h2>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                            当前可用积分余额
+                        </p>
+                    </div>
+                </div>
+                <div class="points-balance">
+                    <span id="user-points-balance">0</span>
+                    <span style="font-size: 1rem; color: var(--text-muted); margin-left: 5px;">积分</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 积分套餐选择 -->
+        <div class="card">
+            <h2><i class="fas fa-shopping-cart"></i> 选择充值套餐</h2>
+            <div class="card-content">
+                <div id="packages-container" class="packages-grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 充值记录 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                    <i class="fas fa-receipt"></i> 充值记录
+                </h2>
+                <button class="btn btn-secondary" onclick="loadPaymentOrders()">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+            </div>
+            <div class="card-content">
+                <div id="orders-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+
+                <div class="pagination-container" id="paginationContainer" style="display: none; margin-top: 20px; text-align: center;">
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 支付确认弹窗 -->
+<div id="paymentModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fab fa-weixin"></i> 微信支付</h3>
+                <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="payment-info">
+                    <div class="payment-amount">
+                        <span style="font-size: 0.875rem; color: var(--text-secondary);">支付金额</span>
+                        <span id="payment-amount" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">¥0.00</span>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-detail-item">
+                            <span style="color: var(--text-secondary);">充值积分</span>
+                            <span id="payment-points">0 积分</span>
+                        </div>
+                        <div class="payment-detail-item">
+                            <span style="color: var(--text-secondary);">套餐名称</span>
+                            <span id="payment-package">套餐</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="payment-qr-code" style="display: flex; justify-content: center; align-items: center; min-height: 300px; width: 100%;">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>生成支付中...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePaymentModal()">
+                    取消支付
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/auth.js"></script>
+    <script src="~/js/points.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/points.css" />
+}

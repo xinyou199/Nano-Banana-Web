@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "后台管理系统";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1><i class="fas fa-cogs"></i> 后台管理系统</h1>
+        <div class="admin-user-info">
+            <span id="username-display">管理员</span>
+            <button class="btn btn-danger" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 登出
+            </button>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> 仪表盘
+            </button>
+            <button class="nav-tab" onclick="switchTab('models')">
+                <i class="fas fa-robot"></i> 模型管理
+            </button>
+            <button class="nav-tab" onclick="switchTab('users')">
+                <i class="fas fa-users"></i> 用户管理
+            </button>
+            <button class="nav-tab" onclick="switchTab('points')">
+                <i class="fas fa-coins"></i> 积分设置
+            </button>
+        </div>
+
+        <!-- 仪表盘 Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <h3><i class="fas fa-chart-line"></i> 系统概览</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">总用户数</div>
+                        <div class="stat-value" id="total-users">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">总绘图次数</div>
+                        <div class="stat-value" id="total-drawings">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">活跃模型</div>
+                        <div class="stat-value" id="active-models">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">系统积分</div>
+                        <div class="stat-value" id="total-points">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模型管理 Tab -->
+        <div id="models" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3><i class="fas fa-robot"></i> 模型管理</h3>
+                    <button class="btn btn-primary" onclick="openModelModal()">
+                        <i class="fas fa-plus"></i> 添加模型
+                    </button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>模型名称</th>
+                                <th>描述</th>
+                                <th>积分消耗</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="models-table-body">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户管理 Tab -->
+        <div id="users" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-users"></i> 用户管理</h3>
+                
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>邮箱</th>
+                                <th>积分</th>
+                                <th>角色</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 积分设置 Tab -->
+        <div id="points" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-coins"></i> 积分设置</h3>
+                
+                <div class="form-group">
+                    <label>新用户注册赠送积分</label>
+                    <input type="number" class="form-control" value="100" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>每日签到奖励积分</label>
+                    <input type="number" class="form-control" value="10" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>邀请好友注册奖励积分</label>
+                    <input type="number" class="form-control" value="50" min="0">
+                </div>
+                
+                <button class="btn btn-primary">
+                    <i class="fas fa-save"></i> 保存设置
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin.js"></script>
+}

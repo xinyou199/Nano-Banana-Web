@@ -1,0 +1,918 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "登录 - 灵绘智影创作平台";
+}
+
+<style>
+    /* ==================== CSS 变量定义 ==================== */
+    :root {
+        --primary: #6366f1;
+        --primary-light: #818cf8;
+        --primary-dark: #4f46e5;
+        --accent: #06b6d4;
+        --accent-glow: rgba(6, 182, 212, 0.4);
+        --bg-dark: #0f0a1f;
+        --text-primary: #ffffff;
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --text-muted: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ==================== 基础重置 ==================== */
+    .unified-login-container * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* ==================== 主容器 ==================== */
+    .unified-login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        background: linear-gradient(135deg, #0f0a1f 0%, #1a1035 25%, #1e1145 50%, #150d30 75%, #0a0618 100%);
+        overflow: hidden;
+        font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* 动态渐变背景 */
+    .bg-gradient {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 30% at 50% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+        animation: gradientShift 15s ease-in-out infinite alternate;
+    }
+
+    @@keyframes gradientShift {
+        0%
+
+    {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+
+    }
+
+    /* 网格背景 */
+    .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    }
+
+    /* 浮动光斑 */
+    .floating-orbs {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        animation: floatOrb 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+        width: 300px;
+        height: 300px;
+        background: rgba(99, 102, 241, 0.2);
+        top: 10%;
+        left: 10%;
+    }
+
+    .orb-2 {
+        width: 200px;
+        height: 200px;
+        background: rgba(139, 92, 246, 0.15);
+        top: 60%;
+        right: 15%;
+        animation-delay: -5s;
+    }
+
+    .orb-3 {
+        width: 150px;
+        height: 150px;
+        background: rgba(6, 182, 212, 0.15);
+        bottom: 20%;
+        left: 20%;
+        animation-delay: -10s;
+    }
+
+    @@keyframes floatOrb {
+        0%, 100%
+
+    {
+        transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate(30px, -20px) scale(1.1);
+    }
+
+    50% {
+        transform: translate(-20px, 30px) scale(0.95);
+    }
+
+    75% {
+        transform: translate(15px, 15px) scale(1.05);
+    }
+
+    }
+
+    /* 粒子效果 */
+    .particles {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        animation: particleFloat 15s linear infinite;
+    }
+
+    @@keyframes particleFloat {
+        0%
+    {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+    }
+    }
+
+    /* 登录卡片 - 毛玻璃效果 */
+    .login-card {
+        position: relative;
+        width: 100%;
+        max-width: 440px;
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset, 0 -20px 40px -20px rgba(99, 102, 241, 0.1) inset;
+        animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+    }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            box-shadow: 0 0 20px 2px var(--accent-glow);
+        }
+
+    @@keyframes cardAppear {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    }
+
+    /* 头部区域 */
+    .login-header {
+        text-align: center;
+        padding: 40px 32px 24px;
+        background: transparent !important;
+    }
+
+    .logo-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5);
+        animation: iconPulse 3s ease-in-out infinite;
+    }
+
+    @@keyframes iconPulse {
+        0%, 100%
+
+    {
+        box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 8px 30px -4px rgba(6, 182, 212, 0.6);
+    }
+
+    }
+
+    .login-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        line-height: 1.6;
+        margin-top: 8px;
+    }
+
+        .subtitle .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    /* 登录方式切换器 */
+    .login-method-switcher {
+        padding: 0 32px;
+        margin-bottom: 24px;
+    }
+
+    .switcher-tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 14px;
+        padding: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .switcher-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border: none;
+        background: transparent;
+        border-radius: 10px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: inherit;
+    }
+
+        .switcher-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        .switcher-btn.active {
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.4);
+        }
+
+    /* 登录面板 */
+    .login-panel {
+        display: none;
+        padding: 0 32px 32px;
+    }
+
+        .login-panel.active {
+            display: block;
+            animation: panelFade 0.4s ease;
+        }
+
+    @@keyframes panelFade {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* 二维码容器 */
+    .qr-image-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    }
+
+        /* 四角装饰 */
+        .qr-image-container::before,
+        .qr-image-container::after,
+        .corner-tr,
+        .corner-bl {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--accent);
+            z-index: 10;
+        }
+
+        .qr-image-container::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 16px 0 0 0;
+        }
+
+        .qr-image-container::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 16px 0;
+        }
+
+    .corner-tr {
+        top: -1px;
+        right: -1px;
+        border-left: none;
+        border-bottom: none;
+        border-radius: 0 16px 0 0;
+    }
+
+    .corner-bl {
+        bottom: -1px;
+        left: -1px;
+        border-right: none;
+        border-top: none;
+        border-radius: 0 0 0 16px;
+    }
+
+    /* 扫描线 */
+    .scan-line {
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        box-shadow: 0 0 10px var(--accent);
+        animation: scanMove 2s ease-in-out infinite;
+        z-index: 5;
+    }
+
+    @@keyframes scanMove {
+        0%, 100%
+
+    {
+        top: 5%;
+        opacity: 1;
+    }
+
+    50% {
+        top: 90%;
+        opacity: 0.8;
+    }
+
+    }
+
+    .qr-loading {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .qr-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .qr-loading p {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.875rem;
+    }
+
+    #qrCodeImage {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    /* 状态提示 - 二维码上方的提示 */
+    .qr-status-overlay {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-secondary);
+        padding: 10px 20px;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        margin: 0 auto 16px auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+        .qr-status-overlay i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+    /* 登录状态栏 - 显示登录进度 */
+    .qr-status-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        border-radius: 10px;
+        font-size: 0.875rem;
+        color: var(--accent);
+        margin: 0 auto 16px auto;
+    }
+
+    @@keyframes pulse {
+        0%, 100%
+
+    {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    }
+
+    .qr-status-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        border-radius: 10px;
+        font-size: 0.875rem;
+        color: var(--accent);
+        margin-bottom: 16px;
+    }
+
+    .qr-refresh-btn {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: inherit;
+    }
+
+        .qr-refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+    /* 账号密码登录 */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+    }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        font-size: 0.875rem;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        color: var(--text-muted);
+    }
+
+        .checkbox-label input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+    .forgot-password {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .btn {
+        padding: 14px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: inherit;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        box-shadow: 0 4px 15px -3px rgba(99, 102, 241, 0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .alert-error {
+        padding: 12px;
+        background: rgba(220, 38, 38, 0.1);
+        color: #fca5a5;
+        border: 1px solid rgba(220, 38, 38, 0.2);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        font-size: 0.875rem;
+    }
+
+    /* 底部 */
+    .login-footer {
+        padding: 20px 32px 28px;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-info {
+        color: var(--text-muted);
+        font-size: 0.8125rem;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+        .feature-info i {
+            color: var(--accent);
+        }
+
+    .stats-info {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+    }
+
+    .stat-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 100px;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+    }
+
+        .stat-badge i {
+            color: var(--primary-light);
+        }
+
+        .stat-badge .number {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+    /* 响应式 */
+    @@media (max-width: 480px) {
+        .unified-login-container
+
+    {
+        padding: 16px;
+        padding-top: 40px;
+    }
+
+    .login-card {
+        border-radius: 20px;
+    }
+
+    .login-header {
+        padding: 32px 24px 20px;
+    }
+
+        .login-header h1 {
+            font-size: 1.5rem;
+        }
+
+    .login-method-switcher,
+    .login-panel,
+    .login-footer {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .switcher-btn span {
+        display: none;
+    }
+
+    .qr-image-container {
+        width: 180px;
+        height: 180px;
+    }
+
+    .stats-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .orb-1 {
+        width: 200px;
+        height: 200px;
+    }
+
+    .orb-2 {
+        width: 150px;
+        height: 150px;
+    }
+
+    .orb-3 {
+        width: 100px;
+        height: 100px;
+    }
+
+    }
+</style>
+
+<div class="unified-login-container">
+    <!-- 背景效果 -->
+    <div class="bg-gradient"></div>
+    <div class="grid-bg"></div>
+
+    <!-- 浮动光斑 -->
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- 粒子效果 -->
+    <div class="particles" id="particles"></div>
+
+    <!-- 登录卡片 -->
+    <div class="login-card">
+        <!-- 头部区域 -->
+        <div class="login-header">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                </div>
+                <h1>灵绘智影AI创作平台</h1>
+            </div>
+            <p class="subtitle">
+                基于 <span class="highlight">Google Nano-Banana-Pro</span> 的强大AI<br>
+                创作能力，让您的创意变为现实
+            </p>
+        </div>
+
+        <!-- 登录方式切换 -->
+        <div class="login-method-switcher">
+            <div class="switcher-tabs">
+                <button type="button" class="switcher-btn active" data-method="wechat">
+                    <i class="fab fa-weixin"></i>
+                    <span>微信扫码登录</span>
+                </button>
+                <button type="button" class="switcher-btn" data-method="password">
+                    <i class="fas fa-user"></i>
+                    <span>账号密码登录</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 微信扫码登录区域 -->
+        <div id="wechat-login-panel" class="login-panel active">
+            <div class="qr-login-container">
+                <div class="qr-content">
+                    <!-- 二维码容器 -->
+                    <div class="qr-image-container" id="qrCodeWrapper">
+                        <span class="corner-tr"></span>
+                        <span class="corner-bl"></span>
+                        <div class="scan-line" id="scanLine"></div>
+
+                        <div id="qrCodeLoading" class="qr-loading">
+                            <div class="qr-spinner"></div>
+                            <p>正在生成二维码...</p>
+                        </div>
+
+                        <div id="qrCodeArea" style="display: none;">
+                            <img id="qrCodeImage" src="" alt="微信扫码登录" />
+                        </div>
+                    </div>
+
+                    <!-- 登录状态栏 -->
+                    <div class="qr-status-bar" id="loginStatus">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span id="statusText">正在初始化扫码登录...</span>
+                    </div>
+                </div>
+
+                <!-- 刷新按钮 -->
+                <div class="qr-footer">
+                    <button type="button" class="qr-refresh-btn" onclick="refreshQrCode()">
+                        <i class="fas fa-sync-alt"></i> 刷新二维码
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 账号密码登录区域 -->
+        <div id="password-login-panel" class="login-panel">
+            <form id="login-form" class="password-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> 用户名
+                    </label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名" autocomplete="username" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> 密码
+                    </label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码" autocomplete="current-password" required />
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        记住我
+                    </label>
+                    <a href="#" class="forgot-password">忘记密码？</a>
+                </div>
+
+                <div class="alert alert-error" id="login-error" style="display:none;"></div>
+
+                <button id="login-btn" type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> 登录
+                </button>
+            </form>
+        </div>
+
+        <!-- 底部信息 -->
+        <div class="login-footer">
+            <p class="feature-info">
+                <i class="fas fa-sparkles"></i>
+                支持图片生成、编辑、融合等多种AI创作模式
+            </p>
+            <div class="stats-info">
+                <span class="stat-badge">
+                    <i class="fas fa-users"></i>
+                    已有 <span class="number">10,000+</span> 创作者
+                </span>
+                <span class="stat-badge">
+                    <i class="fas fa-image"></i>
+                    累计 <span class="number">100,000+</span> 作品
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/auth.js"></script>
+    <script src="~/js/unified-login.js"></script>
+}
