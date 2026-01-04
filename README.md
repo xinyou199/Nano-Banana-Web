@@ -3,6 +3,14 @@
 本仓库实现了一个基于 Nano-Banana 的绘图平台网站（项目名：LhzyAI），支持微信小程序扫码登录、微信支付、后台任务处理和图片处理队列。该项目以 C# (.NET) 实现，包含前后端控制器、业务服务、任务队列与 R2 对象存储支持。
 
 **核心功能**
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/055c3246-6ef3-4b32-924f-ed0ee0f49af1" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/a5a88735-c186-4e41-a51c-45f62515cd48" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/371c1841-1dc7-4473-af40-0e80e7affded" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/b9b7e61e-1635-433b-a1c3-481804cd9b82" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/15a7df86-00e0-4b6b-93d4-442c04d6532d" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/794eb2e8-c4cc-4a34-865b-a6fdc23f56a2" />
+<img width="2550" height="1243" alt="image" src="https://github.com/user-attachments/assets/ad4da80e-2cfd-489f-9503-0a094e6f396a" />
+
 ...
 **许可证**
 - 本仓库包含 `LICENSE.txt`，请查看该文件以确认开源许可证类型与约束。
