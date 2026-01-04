@@ -1,12 +1,3 @@
-# LhzyAI 绘图平台（基于 Nano-Banana）
-
-本仓库实现了一个基于 Nano-Banana 的绘图平台网站（项目名：LhzyAI），支持微信小程序扫码登录、微信支付、后台任务处理和图片处理队列。该项目以 C# (.NET) 实现，包含前后端控制器、业务服务、任务队列与 R2 对象存储支持。
-
-**核心功能**
-...
-**许可证**
-- 本仓库包含 `LICENSE.txt`，请查看该文件以确认开源许可证类型与约束。
-
 部署（编译发布并运行）
 
 下面给出两种常见方式：依赖框架（Framework-dependent）和自包含/脱离框架（Self-contained）。示例基于 .NET 8，目标项目示例为 `GoogleAI`，请根据实际项目名调整命令中的路径与输出目录。
@@ -77,12 +68,3 @@ WantedBy=multi-user.target
 ```
 
 完成后，发布目录 `publish/<RID>` 中会包含可部署的可执行文件及运行所需资源，直接在目标主机控制台启动即可。
-
-
-# 默认登陆账号密码
-账号：admin  
-密码：admin123
-
-
-# 参考项目
-https://github.com/RHZHZ/nano-banana-web UI布局部分参考该开源项目
